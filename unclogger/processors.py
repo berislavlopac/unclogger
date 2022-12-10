@@ -45,9 +45,9 @@ REPLACEMENT_MESSAGE = (
 
 def clean_sensitive_data(logger: WrappedLogger, name: str, event_dict: EventDict) -> EventDict:
     """
-    Clean up unclogger context to mask potentially sensitive personal information.
+    Clean up logging context to mask potentially sensitive personal information.
 
-    For example: In case of any accidental unclogger of user authentication tokens/credentials,
+    For example: In case of any accidental logging of user authentication tokens/credentials,
     this processor would prevent them from being logged. It will replace the offending message
     with a standard one stating by which exactly blacklisted keyword/string was triggered.
 

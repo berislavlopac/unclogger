@@ -18,7 +18,7 @@ def test_globally_bound_data_is_included_in_log_output(caplog, log_method):
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     context_bind(foo=123, bar="abc")
 
@@ -41,7 +41,7 @@ def test_context_clear_without_arguments_removes_all_values(caplog, log_method):
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     context_bind(foo=123, bar="abc")
 
@@ -66,7 +66,7 @@ def test_context_clear_with_arguments_removes_only_selected_values(caplog, log_m
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     context_bind(foo=123, bar="abc")
 

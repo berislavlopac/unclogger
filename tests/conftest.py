@@ -7,6 +7,6 @@ def configure_structlog():
     """
     Change structlog configuration to enable testing.
 
-    * Disable unclogger caching.
+    * Disable logger caching.
     """
     structlog.configure(cache_logger_on_first_use=False)

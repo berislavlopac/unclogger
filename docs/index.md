@@ -1,6 +1,6 @@
 # Unclogger
 
-`unclogger` is the internal library for customisable structured logging. It mirrors the standard Python logging library API, with a few additional functionalities.
+`unclogger` is a simple library for customisable structured logging. It mirrors the standard Python logging library API, with a few additional functionalities.
 
 ## Examples
 

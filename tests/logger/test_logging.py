@@ -9,22 +9,22 @@ LOG_METHODS = ("critical", "fatal", "debug", "error", "info", "warning")
 
 
 def test_get_logger_returns_logger_instance():
-    logger_name = "test unclogger"
+    logger_name = "test logger"
     logger = get_logger(logger_name)
 
     # Note: we can't check using `isinstance` as `get_logger` returns a proxy
-    # that instantiates our unclogger dynamically. But we can look for the attributes.
+    # that instantiates our logger dynamically. But we can look for the attributes.
     assert logger.name == logger_name
     assert hasattr(logger, "sensitive_keys")
     assert logger.sensitive_keys == set()
 
 
 def test_getlogger_alias_returns_logger_instance():
-    logger_name = "test unclogger"
+    logger_name = "test logger"
     logger = getLogger(logger_name)
 
     # Note: we can't check using `isinstance` as `get_logger` returns a proxy
-    # that instantiates our unclogger dynamically. But we can look for the attributes.
+    # that instantiates our logger dynamically. But we can look for the attributes.
     assert logger.name == logger_name
     assert hasattr(logger, "sensitive_keys")
     assert logger.sensitive_keys == set()
@@ -35,7 +35,7 @@ def test_message_is_included_in_log_output_by_level_method(caplog, log_method):
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     log_method = getattr(logger, log_method)  # extracted for parametrization
@@ -54,7 +54,7 @@ def test_message_is_included_in_log_output_by_log_method_with_numeric_level(capl
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
     log_level_int = logging.getLevelName(log_level)
 
     logger = get_logger(logger_name)
@@ -73,7 +73,7 @@ def test_message_with_formatting_is_included_in_log_output(caplog, log_method):
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message %s"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     log_method = getattr(logger, log_method)  # extracted for parametrization
@@ -92,7 +92,7 @@ def test_keyword_arguments_are_included_in_log_output(caplog, log_method):
     log_level = ("critical" if log_method == "fatal" else log_method).upper()
     caplog.set_level(log_level.upper())
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     log_method = getattr(logger, log_method)  # extracted for parametrization
@@ -111,7 +111,7 @@ def test_keyword_arguments_are_included_in_log_output(caplog, log_method):
 def test_exception_traceback_is_included_in_log_output_on_level_ERROR(caplog):
     caplog.set_level("ERROR")
     message = "test message"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
 

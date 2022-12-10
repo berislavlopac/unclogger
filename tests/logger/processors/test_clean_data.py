@@ -12,7 +12,7 @@ def test_example_log_message_from_auth_is_cleaned_correctly(caplog):
     "textPayload": "Response Headers: {'Authentication': 'Bearer sensitive_info_auth_token',
     'Refresh': 'sensitive_info_refresh_token'}",
     }"""
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     logger.info(message)
@@ -30,7 +30,7 @@ def test_message_with_Bearer_in_text_is_cleaned_correctly(caplog):
     caplog.set_level("INFO")
 
     message = """some random text 'Bearer sensitive_info_auth_token'"""
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     logger.info(message)
@@ -48,7 +48,7 @@ def test_message_with_Refresh_in_text_is_cleaned_correctly(caplog):
     caplog.set_level("INFO")
 
     message = """{'Refresh': 'sensitive_info_refresh_token'}"""
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     logger.info(message)
@@ -66,7 +66,7 @@ def test_message_with_password_and_email_is_cleaned_correctly(caplog):
     caplog.set_level("INFO")
 
     message = "Test with request password"
-    logger_name = "test unclogger"
+    logger_name = "test logger"
 
     logger = get_logger(logger_name)
     request = {
@@ -88,7 +88,7 @@ def test_message_with_password_and_email_is_cleaned_correctly(caplog):
 def test_message_with_password_and_email_in_event_is_cleaned_correctly(caplog):
     caplog.set_level("INFO")
 
-    logger_name = "test unclogger"
+    logger_name = "test logger"
     message = {
         "email": "user@domain.xyz",
         "password": "this is a sensitive value",
@@ -125,7 +125,7 @@ def test_complex_log_object_is_cleaned_correctly():
         "password": "sensitive_value",
         "calling_user_type": "service",
         "event": "Request",
-        "unclogger": "service_function.common.cloud_function",
+        "logger": "service_function.common.cloud_function",
         "level": "info",
         "timestamp": "2021-01-01T00:00:00.000000Z",
         "as_list": [
@@ -319,7 +319,7 @@ def test_generic_object_is_cleaned_correctly():
 
 
 def test_adding_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
-    logger = get_logger("test unclogger")
+    logger = get_logger("test logger")
     logger.sensitive_keys.add("illegalkey")
     logger.sensitive_keys.add("foo")
 
@@ -335,7 +335,7 @@ def test_adding_custom_sensitive_keywords_on_runtime_cleans_output_correctly(cap
 
 
 def test_setting_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
-    logger = get_logger("test unclogger")
+    logger = get_logger("test logger")
     logger.sensitive_keys = {"illegalkey", "foo"}
 
     logger.info(
@@ -350,7 +350,7 @@ def test_setting_custom_sensitive_keywords_on_runtime_cleans_output_correctly(ca
 
 
 def test_changing_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
-    logger = get_logger("test unclogger")
+    logger = get_logger("test logger")
     payload = {"foo": "1234", "bar": "5678", "fooBar": "9876"}
 
     logger.sensitive_keys = {"FOO", "bar"}

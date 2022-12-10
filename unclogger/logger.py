@@ -1,4 +1,4 @@
-"""Custom unclogger with structured unclogger capabilities."""
+"""Custom logger with structured logging capabilities."""
 
 import logging as _std_logging
 import os
@@ -12,18 +12,18 @@ from .processors import clean_sensitive_data
 
 # aliasing the type
 class Unclogger(structlog.stdlib.BoundLogger):
-    """Custom unclogger class."""
+    """Custom logger class."""
 
     @property
     def sensitive_keys(self) -> set:
-        """Returns the custom set of sensitive keys set on the unclogger."""
+        """Returns the custom set of sensitive keys set on the logger."""
         if not hasattr(self._logger, "sensitive_keys"):
             setattr(self._logger, "sensitive_keys", set())
         return getattr(self._logger, "sensitive_keys")
 
     @sensitive_keys.setter
     def sensitive_keys(self, value: set):
-        """Sets the custom set of sensitive keys on the unclogger."""
+        """Sets the custom set of sensitive keys on the logger."""
         setattr(self._logger, "sensitive_keys", value)
 
 
@@ -59,7 +59,7 @@ def configure(level: Union[int, str] = "", varname: str = "CLOGGER_LEVEL") -> No
         level: The level name or number.
         varname: Name of the environment variable to check for the level value.
                  The variable is only checked if the `level` is an empty string.
-                 If neither is set, the default level is `unclogger.INFO`.
+                 If neither is set, the default level is `logging.INFO`.
 
     Raises:
         ValueError if the level is not one of standard `logging` levels.
@@ -76,23 +76,23 @@ def configure(level: Union[int, str] = "", varname: str = "CLOGGER_LEVEL") -> No
 
 def get_logger(name: Optional[str] = None) -> Unclogger:
     """
-    Retrieve a unclogger instance.
+    Retrieve a logger instance.
 
         >>> from unclogger import get_logger
         >>> unclogger = get_logger("unclogger")
         >>> unclogger.info("message")
-        {"event": "message", "unclogger": "unclogger", "level": "info", "timestamp": "..."}
+        {"event": "message", "logger": "logger", "level": "info", "timestamp": "..."}
 
-    The returned unclogger supports the standard Python unclogger protocol.
+    The returned logger supports the standard Python logging protocol.
 
     Args:
-        name: Optional name for the unclogger.
+        name: Optional name for the logger.
     """
     return cast(Unclogger, structlog.stdlib.get_logger(name).bind())
 
 
 def context_bind(**kwargs: Any) -> None:
-    """Inserts data into the global unclogger context.
+    """Inserts data into the global logging context.
 
     Args:
         kwargs: Any keyword argument will be inserted into the global context.
