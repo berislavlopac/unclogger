@@ -1,0 +1,23 @@
+site_name: Unclogger
+repo_url: https://github/berislavlopac/unclogger
+site_description: Simple library for customisable structured logging.]
+site_author: Berislav Lopac <berislav@lopac.net>
+use_directory_urls: false
+theme:
+  name: material
+plugins:
+  - search
+  - mkapi
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      permalink: yes
+  - codehilite:
+      guess_lang: no
+nav:
+  - index.md
+  - reference.md
