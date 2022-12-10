@@ -5,6 +5,7 @@ site_author: Berislav Lopac <berislav@lopac.net>
 use_directory_urls: false
 theme:
   name: material
+  logo: assets/plunger.png
 plugins:
   - search
   - mkapi
