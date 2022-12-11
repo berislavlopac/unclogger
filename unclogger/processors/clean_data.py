@@ -1,11 +1,15 @@
-"""Custom processors."""
+"""Custom processor for cleaning sensitive data."""
+import hashlib
 import json
+import os
 from collections import ChainMap
 from decimal import Decimal
 from functools import singledispatch
+from typing import Any
 
 from structlog.types import EventDict, WrappedLogger
 
+# TODO: enable setting field names ad keywords in external configuration files
 SENSITIVE_FIELD_NAMES = [
     "password",
     "email",
@@ -37,10 +41,9 @@ SENSITIVE_KEYWORDS = [
     "Bearer ",
 ]
 
-HIDE_TEXT = "********"
-REPLACEMENT_MESSAGE = (
-    "The content of this message has been replaced because the following keyword was detected: "
-)
+REPLACEMENT_TEXT = os.getenv("UNCLOGGER_REPLACEMENT", default="********")
+REPLACEMENT = getattr(hashlib, REPLACEMENT_TEXT, REPLACEMENT_TEXT)
+REPLACEMENT_MESSAGE = "#### WARNING: Log message replaced due to sensitive keyword: "
 
 
 def clean_sensitive_data(logger: WrappedLogger, name: str, event_dict: EventDict) -> EventDict:
@@ -101,13 +104,24 @@ def _clean_up_sequence(data, logger):
 
 @_clean_up.register
 def _clean_up_dict(data: dict, logger):
-    sensitive_fields = [
+    sensitive_fields = {
         field.lower()
         for field in [*SENSITIVE_FIELD_NAMES, *getattr(logger, "sensitive_keys", set())]
-    ]
+    }
     cleaned_data = ChainMap({}, data)
     for key, value in cleaned_data.items():
         cleaned_data[key] = (
-            HIDE_TEXT if key.lower() in sensitive_fields else _clean_up(value, logger)
+            _replace(value) if key.lower() in sensitive_fields else _clean_up(value, logger)
         )
     return dict(cleaned_data)
+
+
+def _replace(value: Any):
+    if callable(REPLACEMENT):
+        replaced = REPLACEMENT(str(value).encode())
+        if REPLACEMENT_TEXT.startswith("shake_"):
+            return replaced.hexdigest(256)
+        else:
+            return replaced.hexdigest()
+    else:
+        return REPLACEMENT

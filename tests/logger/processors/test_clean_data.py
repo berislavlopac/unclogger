@@ -2,7 +2,7 @@ import json
 from decimal import Decimal
 
 from unclogger import get_logger
-from unclogger.processors import clean_sensitive_data, HIDE_TEXT
+from unclogger.processors.clean_data import clean_sensitive_data, REPLACEMENT_TEXT
 
 
 def test_example_log_message_from_auth_is_cleaned_correctly(caplog):
@@ -19,8 +19,9 @@ def test_example_log_message_from_auth_is_cleaned_correctly(caplog):
 
     record = json.loads(caplog.messages[0])
     assert len(record) == 4
-    assert record["event"] == (
-        "The content of this message has been replaced because the following keyword was detected: 'Authentication':"
+    assert (
+        record["event"]
+        == "#### WARNING: Log message replaced due to sensitive keyword: 'Authentication':"
     )
     assert record["level"] == "info"
     assert record["logger"] == logger_name
@@ -37,8 +38,8 @@ def test_message_with_Bearer_in_text_is_cleaned_correctly(caplog):
 
     record = json.loads(caplog.messages[0])
     assert len(record) == 4
-    assert record["event"] == (
-        "The content of this message has been replaced because the following keyword was detected: 'Bearer "
+    assert (
+        record["event"] == "#### WARNING: Log message replaced due to sensitive keyword: 'Bearer "
     )
     assert record["level"] == "info"
     assert record["logger"] == logger_name
@@ -55,8 +56,8 @@ def test_message_with_Refresh_in_text_is_cleaned_correctly(caplog):
 
     record = json.loads(caplog.messages[0])
     assert len(record) == 4
-    assert record["event"] == (
-        "The content of this message has been replaced because the following keyword was detected: 'Refresh':"
+    assert (
+        record["event"] == "#### WARNING: Log message replaced due to sensitive keyword: 'Refresh':"
     )
     assert record["level"] == "info"
     assert record["logger"] == logger_name
@@ -81,8 +82,8 @@ def test_message_with_password_and_email_is_cleaned_correctly(caplog):
     assert record["event"] == "Test with request password"
     assert record["level"] == "info"
     assert record["logger"] == logger_name
-    assert record["request"]["password"] == HIDE_TEXT
-    assert record["request"]["email"] == HIDE_TEXT
+    assert record["request"]["password"] == REPLACEMENT_TEXT
+    assert record["request"]["email"] == REPLACEMENT_TEXT
 
 
 def test_message_with_password_and_email_in_event_is_cleaned_correctly(caplog):
@@ -101,8 +102,8 @@ def test_message_with_password_and_email_in_event_is_cleaned_correctly(caplog):
     assert len(record) == 4
     assert record["level"] == "info"
     assert record["logger"] == logger_name
-    assert record["event"]["password"] == HIDE_TEXT
-    assert record["event"]["email"] == HIDE_TEXT
+    assert record["event"]["password"] == REPLACEMENT_TEXT
+    assert record["event"]["email"] == REPLACEMENT_TEXT
 
 
 def test_complex_log_object_is_cleaned_correctly():
@@ -146,19 +147,19 @@ def test_complex_log_object_is_cleaned_correctly():
     cleaned_event_dict = clean_sensitive_data(None, "", event_dict)
 
     assert cleaned_event_dict is not None
-    assert cleaned_event_dict["email"] is HIDE_TEXT
-    assert cleaned_event_dict["password"] is HIDE_TEXT
-    assert cleaned_event_dict["parameters"]["body"]["email"] is HIDE_TEXT
-    assert cleaned_event_dict["parameters"]["body"]["password"] is HIDE_TEXT
-    assert cleaned_event_dict["as_list"][0]["firstName"] is HIDE_TEXT
-    assert cleaned_event_dict["as_list"][0]["lastName"] is HIDE_TEXT
-    assert cleaned_event_dict["as_list"][1]["firstName"] is HIDE_TEXT
-    assert cleaned_event_dict["as_list"][1]["lastName"] is HIDE_TEXT
-    assert cleaned_event_dict["context"]["email"] is HIDE_TEXT
-    assert cleaned_event_dict["response"]["auth"] is HIDE_TEXT
-    assert cleaned_event_dict["response"]["refresh"] is HIDE_TEXT
-    assert cleaned_event_dict["response"]["email_1"] is HIDE_TEXT
-    assert cleaned_event_dict["Authentication"] is HIDE_TEXT
+    assert cleaned_event_dict["email"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["password"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["parameters"]["body"]["email"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["parameters"]["body"]["password"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["as_list"][0]["firstName"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["as_list"][0]["lastName"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["as_list"][1]["firstName"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["as_list"][1]["lastName"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["context"]["email"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["response"]["auth"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["response"]["refresh"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["response"]["email_1"] is REPLACEMENT_TEXT
+    assert cleaned_event_dict["Authentication"] is REPLACEMENT_TEXT
 
     assert cleaned_event_dict != event_dict
 
@@ -173,7 +174,7 @@ def test_log_object_in_event_is_cleaned_correctly():
     cleaned_event_dict = clean_sensitive_data(None, "", event_dict)
 
     assert cleaned_event_dict["event"] == (
-        "The content of this message has been replaced because the following keyword was detected: 'Bearer "
+        "#### WARNING: Log message replaced due to sensitive keyword: 'Bearer "
     )
     assert event_dict != cleaned_event_dict
 
@@ -188,7 +189,7 @@ def test_textual_value_is_cleaned_correctly():
     cleaned_event_dict = clean_sensitive_data(None, "", event_dict)
 
     assert cleaned_event_dict["str_field"] == (
-        "The content of this message has been replaced because the following keyword was detected: Bearer "
+        "#### WARNING: Log message replaced due to sensitive keyword: Bearer "
     )
 
 
@@ -203,7 +204,7 @@ def test_list_value_is_cleaned_correctly():
 
     assert cleaned_event_dict["list_field"] == [
         "http",
-        "The content of this message has been replaced because the following keyword was detected: Bearer ",
+        "#### WARNING: Log message replaced due to sensitive keyword: Bearer ",
         "blabla",
     ]
 
@@ -219,7 +220,7 @@ def test_dict_value_is_cleaned_correctly():
 
     assert cleaned_event_dict["dict_field"] == {
         "a": "http",
-        "b": "The content of this message has been replaced because the following keyword was detected: Bearer ",
+        "b": "#### WARNING: Log message replaced due to sensitive keyword: Bearer ",
         "c": "blabla",
     }
 
@@ -235,7 +236,7 @@ def test_tuple_value_is_cleaned_correctly():
 
     assert cleaned_event_dict["tuple_field"] == [
         "http",
-        "The content of this message has been replaced because the following keyword was detected: Bearer ",
+        "#### WARNING: Log message replaced due to sensitive keyword: Bearer ",
         "blabla",
     ]
 
@@ -250,7 +251,7 @@ def test_set_value_is_cleaned_correctly():
     cleaned_event_dict = clean_sensitive_data(None, "", event_dict)
 
     assert sorted(cleaned_event_dict["set_field"]) == [
-        "The content of this message has been replaced because the following keyword was detected: Bearer ",
+        "#### WARNING: Log message replaced due to sensitive keyword: Bearer ",
         "blabla",
         "http",
     ]
@@ -297,7 +298,7 @@ def test_generic_object_with_custom_text_is_cleaned_correctly():
 
     assert isinstance(cleaned_event_dict["object_field"], str)
     assert cleaned_event_dict["object_field"] == (
-        "The content of this message has been replaced because the following keyword was detected: Bearer "
+        "#### WARNING: Log message replaced due to sensitive keyword: Bearer "
     )
 
 
@@ -330,7 +331,7 @@ def test_adding_custom_sensitive_keywords_on_runtime_cleans_output_correctly(cap
     )
 
     record = json.loads(caplog.messages[0])
-    assert record["illegalKey"] == HIDE_TEXT
+    assert record["illegalKey"] == REPLACEMENT_TEXT
     assert record["context_id"] == "cxt_fe76c000000000000000000_0000000000000"
 
 
@@ -345,7 +346,7 @@ def test_setting_custom_sensitive_keywords_on_runtime_cleans_output_correctly(ca
     )
 
     record = json.loads(caplog.messages[0])
-    assert record["illegalKey"] == HIDE_TEXT
+    assert record["illegalKey"] == REPLACEMENT_TEXT
     assert record["context_id"] == "cxt_fe76c000000000000000000_0000000000000"
 
 
@@ -357,14 +358,14 @@ def test_changing_custom_sensitive_keywords_on_runtime_cleans_output_correctly(c
     logger.info("clean sensitive keys with dict", payload=payload)
     record = json.loads(caplog.messages[0])
 
-    assert record["payload"]["foo"] == HIDE_TEXT
-    assert record["payload"]["bar"] == HIDE_TEXT
-    assert record["payload"]["fooBar"] != HIDE_TEXT
+    assert record["payload"]["foo"] == REPLACEMENT_TEXT
+    assert record["payload"]["bar"] == REPLACEMENT_TEXT
+    assert record["payload"]["fooBar"] != REPLACEMENT_TEXT
 
     logger.sensitive_keys.add("fooBar")
     logger.info("clean sensitive keys with dict", payload=payload)
     fully_cleaned_record = json.loads(caplog.messages[1])
 
-    assert fully_cleaned_record["payload"]["foo"] == HIDE_TEXT
-    assert fully_cleaned_record["payload"]["bar"] == HIDE_TEXT
-    assert fully_cleaned_record["payload"]["fooBar"] == HIDE_TEXT
+    assert fully_cleaned_record["payload"]["foo"] == REPLACEMENT_TEXT
+    assert fully_cleaned_record["payload"]["bar"] == REPLACEMENT_TEXT
+    assert fully_cleaned_record["payload"]["fooBar"] == REPLACEMENT_TEXT

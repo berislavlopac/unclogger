@@ -2,9 +2,7 @@
 
 `unclogger` is a simple library for customisable structured logging. It mirrors the standard Python logging library API, with a few additional functionalities.
 
-## Examples
-
-### Structured Logging
+## Structured Logging
 
 Passing keyword arguments to a log method will add them to the log data. Log data is converted to a JSON message before sending.
 
@@ -106,26 +104,30 @@ The [`context_bind`](reference.md#uncloggerloggercontext_bind) function will set
     >>> logger.info("bar")
 
    
-### Cleaning of Sensitive Values
+## Cleaning Sensitive Data
 
-`unclogger` provides support for hiding either sensitive fields (hiding the value of a key value pair if the key matches), or based on sensitive keywords within a string (hiding the whole string if the keyword is detected)
+`unclogger` provides support for hiding either sensitive fields (hiding the value of a key/value pair if the key matches), or based on sensitive keywords within a string (hiding the whole string if a keyword is detected).
 
-* Sensitive fields to be cleaned either come from the hardcoded list in `unclogger/processors` or can be provided to the logger object itself.
+* A base list of sensitive key names is hard-coded in `unclogger`; this list can be either expanded or replaced with custom names.
 * Sensitive values are provided from the hardcode list in `unclogger/processors`
 
+### Sensitive Field Names
 
-#### Hardcoded sensitive fields
-
-If value is in the list of harcoded keywords then no further action is neccesary for the value to be hidden
+If the name of any field in the structured log message matches one of the listed sensitive names, the value of that field is (recursively) replaced with a safe value:
 
     >>> from unclogger import get_logger
     >>> logger = get_logger("test logger")
-    >>> logger.info("clean password", password="blabla")
-    {'password': '********', 'event': 'clean password', 'logger': 'test logger', 'level': 'info', 'timestamp': '2022-02-02T10:53:52.245833Z'}
+    >>> logger.info("clean password", password="blabla", foo={"email": "test@example.xcom"})
+    {
+        "password": "********",
+        "foo": {"email": "********"},
+        "event": "clean password",
+        "logger": "test logger",
+        "level": "info",
+        "timestamp": "2022-02-02T10:53:52.245833Z"
+    }
 
-#### Provided sensitive fields
-
-Keywords can be either added or set on the logger
+A basic list of sensitive key names is hard-coded in `unclogger`; this list can be expanded with custom names:
 
     >>> from unclogger import get_logger
     >>> logger = get_logger("test logger")
@@ -133,10 +135,26 @@ Keywords can be either added or set on the logger
     >>> logger.sensitive_keys.add("foobar")
     >>> payload = {"foo": "1234", "bar": "5678", "fooBar": "9876"}
     >>> logger.info("clean sensitive values)", payload=payload)
-    {'payload': {'foo': '********', 'bar': '********', 'fooBar': '********'}, 'event': 'clean sensitive values', 'logger': 'test logger', 'level': 'info', 'timestamp': '2022-02-02T11:08:01.260019Z'}    logger.sensitive_keys = {"foo", "bar"}
+    {
+        "payload": {
+            "foo": "********",
+            "bar": "********",
+            "fooBar": "********"
+        },
+        "event": "clean sensitive values",
+        "logger": "test logger",
+        "level": "info",
+        "timestamp":
+        "2022-02-02T11:08:01.260019Z"
+    }
 
-#### Sensitive values
+### Sensitive Text Values
     >>> from unclogger import get_logger
     >>> logger = get_logger("test logger")
     >>> logger.info("'Authentication': 1234")
-    {'event': "The content of this message has been replaced because the following keyword was detected: 'Authentication':", 'logger': 'test logger', 'level': 'info', 'timestamp': '2022-02-02T11:22:21.997204Z'}
+    {
+        "event": "#### WARNING: Log message replaced due to sensitive keyword: 'Authentication':",
+        "logger": "test logger",
+        "level": "info",
+        "timestamp": "2022-02-02T11:22:21.997204Z"
+    }
