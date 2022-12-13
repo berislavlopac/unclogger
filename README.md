@@ -20,7 +20,7 @@ Simple library for customisable structured logging.]
 During development, a number of checks and tests can be executed on the library codebase:
 
 ```shell
-$ flake8                                             # code linting
+$ pylint unclogger/                                  # code linting
 $ mypy --install-types --non-interactive unclogger/  # Python typing analysis
 $ black --check .                                    # Python code formatting
 $ isort --check .                                    # Import statement optimisation

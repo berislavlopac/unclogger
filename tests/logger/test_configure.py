@@ -10,22 +10,6 @@ def test_configure_sets_default_log_level():
     assert logging.root.level == logging.INFO
 
 
-def test_configure_sets_log_level_with_default_environment_variable(monkeypatch, caplog):
-    monkeypatch.setenv("CLOGGER_LEVEL", "debug")
-    with caplog.at_level(logging.INFO):
-        assert logging.root.level == logging.INFO
-        configure()
-        assert logging.root.level == logging.DEBUG
-
-
-def test_configure_sets_log_level_with_custom_environment_variable(monkeypatch, caplog):
-    monkeypatch.setenv("FOO_BAR", "debug")
-    with caplog.at_level(logging.INFO):
-        assert logging.root.level == logging.INFO
-        configure(varname="FOO_BAR")
-        assert logging.root.level == logging.DEBUG
-
-
 def test_configure_sets_log_level_with_textual_parameter(caplog):
     with caplog.at_level(logging.INFO):
         assert logging.root.level == logging.INFO

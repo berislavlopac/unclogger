@@ -1,7 +1,6 @@
 """Custom logger with structured logging capabilities."""
 
 import logging as _std_logging
-import os
 from typing import Any, cast, Optional, Union
 
 import structlog
@@ -48,24 +47,19 @@ structlog.configure(
 )
 
 
-def configure(level: Union[int, str] = "", varname: str = "CLOGGER_LEVEL") -> None:
+def configure(level: Union[int, str] = _std_logging.INFO) -> None:
     """
     Set the basic configuration for new loggers.
 
-    The level can be set by an environment variable, or passed as the level
+    The level can be passed as the level
     [name or number](https://docs.python.org/3/library/logging.html#logging-levels).
 
     Args:
         level: The level name or number.
-        varname: Name of the environment variable to check for the level value.
-                 The variable is only checked if the `level` is an empty string.
-                 If neither is set, the default level is `logging.INFO`.
 
     Raises:
         ValueError if the level is not one of standard `logging` levels.
     """
-    if level == "":
-        level = os.getenv(varname, _std_logging.INFO)
     if isinstance(level, str):
         level = int(level) if level.isdigit() else _std_logging.getLevelName(level.upper())
     if not isinstance(level, int):

@@ -1,4 +1,6 @@
 """Custom processor for cleaning sensitive data."""
+# pylint: disable=unused-argument
+
 import hashlib
 import json
 import os
@@ -121,7 +123,5 @@ def _replace(value: Any):
         replaced = REPLACEMENT(str(value).encode())
         if REPLACEMENT_TEXT.startswith("shake_"):
             return replaced.hexdigest(256)
-        else:
-            return replaced.hexdigest()
-    else:
-        return REPLACEMENT
+        return replaced.hexdigest()
+    return REPLACEMENT
