@@ -1,6 +1,7 @@
 """Custom logger with structured logging capabilities."""
 
 import logging as _std_logging
+from types import SimpleNamespace
 from typing import Any, cast, Optional, Union
 
 import structlog
@@ -14,16 +15,11 @@ class Unclogger(structlog.stdlib.BoundLogger):
     """Custom logger class."""
 
     @property
-    def sensitive_keys(self) -> set:
-        """Returns the custom set of sensitive keys set on the logger."""
-        if not hasattr(self._logger, "sensitive_keys"):
-            setattr(self._logger, "sensitive_keys", set())
-        return getattr(self._logger, "sensitive_keys")
-
-    @sensitive_keys.setter
-    def sensitive_keys(self, value: set):
-        """Sets the custom set of sensitive keys on the logger."""
-        setattr(self._logger, "sensitive_keys", value)
+    def config(self) -> SimpleNamespace:
+        """Simple configuration object for custom logger functionality."""
+        if not hasattr(self._logger, "config"):
+            setattr(self._logger, "config", SimpleNamespace())
+        return getattr(self._logger, "config")
 
 
 structlog.configure(

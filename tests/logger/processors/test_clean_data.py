@@ -321,8 +321,7 @@ def test_generic_object_is_cleaned_correctly():
 
 def test_adding_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
     logger = get_logger("test logger")
-    logger.sensitive_keys.add("illegalkey")
-    logger.sensitive_keys.add("foo")
+    logger.config.sensitive_keys = {"illegalkey", "foo"}
 
     logger.info(
         "clean sensitive keys with dict",
@@ -337,7 +336,7 @@ def test_adding_custom_sensitive_keywords_on_runtime_cleans_output_correctly(cap
 
 def test_setting_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
     logger = get_logger("test logger")
-    logger.sensitive_keys = {"illegalkey", "foo"}
+    logger.config.sensitive_keys = {"illegalkey", "foo"}
 
     logger.info(
         "clean sensitive keys with dict",
@@ -354,7 +353,7 @@ def test_changing_custom_sensitive_keywords_on_runtime_cleans_output_correctly(c
     logger = get_logger("test logger")
     payload = {"foo": "1234", "bar": "5678", "fooBar": "9876"}
 
-    logger.sensitive_keys = {"FOO", "bar"}
+    logger.config.sensitive_keys = {"FOO", "bar"}
     logger.info("clean sensitive keys with dict", payload=payload)
     record = json.loads(caplog.messages[0])
 
@@ -362,7 +361,7 @@ def test_changing_custom_sensitive_keywords_on_runtime_cleans_output_correctly(c
     assert record["payload"]["bar"] == REPLACEMENT_TEXT
     assert record["payload"]["fooBar"] != REPLACEMENT_TEXT
 
-    logger.sensitive_keys.add("fooBar")
+    logger.config.sensitive_keys.add("fooBar")
     logger.info("clean sensitive keys with dict", payload=payload)
     fully_cleaned_record = json.loads(caplog.messages[1])
 

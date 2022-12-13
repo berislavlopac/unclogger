@@ -1,5 +1,6 @@
 import json
 import logging
+from types import SimpleNamespace
 
 import pytest
 
@@ -13,10 +14,9 @@ def test_get_logger_returns_logger_instance():
     logger = get_logger(logger_name)
 
     # Note: we can't check using `isinstance` as `get_logger` returns a proxy
-    # that instantiates our logger dynamically. But we can look for the attributes.
+    # that instantiates our logger dynamically; but we can look for the attributes.
     assert logger.name == logger_name
-    assert hasattr(logger, "sensitive_keys")
-    assert logger.sensitive_keys == set()
+    assert isinstance(logger.config, SimpleNamespace)
 
 
 def test_getlogger_alias_returns_logger_instance():
@@ -24,10 +24,9 @@ def test_getlogger_alias_returns_logger_instance():
     logger = getLogger(logger_name)
 
     # Note: we can't check using `isinstance` as `get_logger` returns a proxy
-    # that instantiates our logger dynamically. But we can look for the attributes.
+    # that instantiates our logger dynamically; but we can look for the attributes.
     assert logger.name == logger_name
-    assert hasattr(logger, "sensitive_keys")
-    assert logger.sensitive_keys == set()
+    assert isinstance(logger.config, SimpleNamespace)
 
 
 @pytest.mark.parametrize("log_method", LOG_METHODS)

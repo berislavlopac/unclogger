@@ -106,10 +106,10 @@ def _clean_up_sequence(data, logger):
 
 @_clean_up.register
 def _clean_up_dict(data: dict, logger):
-    sensitive_fields = {
-        field.lower()
-        for field in [*SENSITIVE_FIELD_NAMES, *getattr(logger, "sensitive_keys", set())]
-    }
+    sensitive_keys = set()
+    if hasattr(logger, "config") and hasattr(logger.config, "sensitive_keys"):
+        sensitive_keys = logger.config.sensitive_keys
+    sensitive_fields = {field.lower() for field in [*SENSITIVE_FIELD_NAMES, *sensitive_keys]}
     cleaned_data = ChainMap({}, data)
     for key, value in cleaned_data.items():
         cleaned_data[key] = (
