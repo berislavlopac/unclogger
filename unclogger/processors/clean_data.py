@@ -1,35 +1,86 @@
 """Custom processor for cleaning sensitive data."""
 # pylint: disable=unused-argument
 from __future__ import annotations
+
 import json
 import os
 from collections import ChainMap
 from decimal import Decimal
 from functools import singledispatch
-from typing import Any, Callable, Iterable, Union, Protocol, Optional
+from typing import Any, Callable, Iterable, Optional, Protocol, Union
 
 from structlog.types import EventDict, WrappedLogger
 
 
 class HashObjectProtocol(Protocol):
-    """ Protocol for objects returned by the `hashlib` library functions. """
+    """
+    Protocol for objects returned by the `hashlib` library functions.
+
+    See `hashlib` documentation for details:
+    https://docs.python.org/3.10/library/hashlib.html
+    """
 
     @property
-    def block_size(self) -> int: ...
+    def block_size(self) -> int:
+        """The internal block size of the hash algorithm in bytes."""
 
     @property
-    def digest_size(self) -> int: ...
+    def digest_size(self) -> int:
+        """The size of the resulting hash in bytes."""
 
     @property
-    def name(self) -> str: ...
+    def name(self) -> str:
+        """
+        The canonical name of this hash.
 
-    def copy(self) -> HashObjectProtocol: ...
+        Always lowercase and always suitable as a parameter to new()
+        to create another hash of this type.
+        """
 
-    def digest(self, length: Optional[int] = None) -> str: ...
+    def copy(self) -> HashObjectProtocol:
+        """
+        Returns an identical copy of the hash object.
 
-    def hexdigest(self, length: Optional[int] = None) -> str: ...
+        This can be used to efficiently compute the digests of data
+        sharing a common initial substring.
+        """
 
-    def update(self, obj: bytes, /) -> None: ...
+    def digest(self, length: Optional[int] = None) -> str:
+        """
+        Return the digest of the data passed to the update() method so far.
+
+        This is a bytes object of size digest_size which may contain bytes in the
+        whole range from 0 to 255.
+
+        The SHAKE algorithms provide variable length digests with
+        `length_in_bits//2` up to 128 or 256 bits of security, so their digest
+        methods require a length.
+
+        Args:
+            length: Optional length in bytes, required of SHAKE algorithms.
+        """
+
+    def hexdigest(self, length: Optional[int] = None) -> str:
+        """
+        Like `digest()`, except containing only hexadecimal digits.
+
+        This may be used to exchange the value safely in email or other
+        non-binary environments.
+
+        Args:
+            length: Optional length in bytes, required of SHAKE algorithms.
+        """
+
+    def update(self, obj: bytes, /) -> None:
+        """
+        Update the hash object with the bytes-like object.
+
+        Repeated calls are equivalent to a single call with the concatenation of
+        all the arguments: m.update(a); m.update(b) is equivalent to m.update(a+b).
+
+        Args:
+            obj: The byte-string to concatenate to the previous value.
+        """
 
 
 ReplacementType = Union[str, Callable[[bytes], HashObjectProtocol]]
@@ -71,16 +122,15 @@ REPLACEMENT_MESSAGE = "#### WARNING: Log message replaced due to sensitive keywo
 
 def clean_sensitive_data(logger: WrappedLogger, name: str, event_dict: EventDict) -> EventDict:
     """
-    Clean up logging context to mask potentially sensitive personal information.
+    Clean up logging context to mask potentially sensitive information.
 
-    For example: In case of any accidental logging of user authentication tokens/credentials,
-    this processor would prevent them from being logged. It will replace the offending message
-    with a standard one stating by which exactly blacklisted keyword/string was triggered.
+    This function follows the standard
+    [Structlog processor API](https://www.structlog.org/en/stable/processors.html).
 
     Args:
-        logger:
-        name:
-        event_dict:
+        logger: The logger instance doing the logging.
+        name: Name of the logging method, e.g. `info` or `warning`.
+        event_dict: Current context, including modifications by other processors.
 
     Returns:
         dict

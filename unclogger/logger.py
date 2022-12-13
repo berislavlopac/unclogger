@@ -43,9 +43,9 @@ structlog.configure(
 )
 
 
-def configure(level: Union[int, str] = _std_logging.INFO) -> None:
+def set_level(level: Union[int, str] = _std_logging.INFO) -> None:
     """
-    Set the basic configuration for new loggers.
+    Sets the global logging level.
 
     The level can be passed as the level
     [name or number](https://docs.python.org/3/library/logging.html#logging-levels).
@@ -60,7 +60,6 @@ def configure(level: Union[int, str] = _std_logging.INFO) -> None:
         level = int(level) if level.isdigit() else _std_logging.getLevelName(level.upper())
     if not isinstance(level, int):
         raise ValueError(f"Incorrect log level '{level}'")
-    _std_logging.basicConfig(format="%(message)s")
     _std_logging.getLogger().setLevel(level=level)
 
 

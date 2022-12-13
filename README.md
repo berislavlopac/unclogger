@@ -1,7 +1,7 @@
 Unclogger
 =========
 
-Simple library for customisable structured logging.]
+Simple library for customisable structured logging.
 
 
 ## Development Environment
@@ -54,5 +54,3 @@ $ mkdocs build
 ```
 
 This will create the HTML documentation in the `site` directory.
-
-API Documentation is served by GitLab Pages.
