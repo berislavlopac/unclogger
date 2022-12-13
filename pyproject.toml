@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "unclogger"
 repository = "https://github.com/berislavlopac/unclogger"
-version = "0.1.1"
+version = "0.1.2"
 description = "Custom wrapper for enhanced structured logging."
 authors = ["Berislav Lopac <berislav@lopac.net>"]
-readme = "README.md"
+readme = "docs/index.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"

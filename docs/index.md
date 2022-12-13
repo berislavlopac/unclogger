@@ -105,7 +105,7 @@ Each logger has a local context; values can be bound to it so they can appear in
 
 ## Global Context
 
-The [`context_bind`](reference.md#uncloggerloggercontext_bind) function will set values in the global context, where it can be used by any logger.
+The [`context_bind`](reference.md#uncloggerloggercontext_bind) function will set values in the global context, where they can be used by any logger.
 
 !!! Example
 
