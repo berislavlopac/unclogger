@@ -10,6 +10,8 @@ plugins:
   - search
   - mkapi
 markdown_extensions:
+  - abbr
+  - attr_list
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -21,4 +23,5 @@ markdown_extensions:
       guess_lang: no
 nav:
   - index.md
+  - sensitive.md
   - reference.md

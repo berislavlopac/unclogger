@@ -1,18 +1,40 @@
 """Custom processor for cleaning sensitive data."""
 # pylint: disable=unused-argument
-
-import hashlib
+from __future__ import annotations
 import json
 import os
 from collections import ChainMap
 from decimal import Decimal
 from functools import singledispatch
-from typing import Any
+from typing import Any, Callable, Iterable, Union, Protocol, Optional
 
 from structlog.types import EventDict, WrappedLogger
 
-# TODO: enable setting field names ad keywords in external configuration files
-SENSITIVE_FIELD_NAMES = [
+
+class HashObjectProtocol(Protocol):
+    """ Protocol for objects returned by the `hashlib` library functions. """
+
+    @property
+    def block_size(self) -> int: ...
+
+    @property
+    def digest_size(self) -> int: ...
+
+    @property
+    def name(self) -> str: ...
+
+    def copy(self) -> HashObjectProtocol: ...
+
+    def digest(self, length: Optional[int] = None) -> str: ...
+
+    def hexdigest(self, length: Optional[int] = None) -> str: ...
+
+    def update(self, obj: bytes, /) -> None: ...
+
+
+ReplacementType = Union[str, Callable[[bytes], HashObjectProtocol]]
+
+SENSITIVE_FIELDS = [
     "password",
     "email",
     "email_1",
@@ -43,8 +65,7 @@ SENSITIVE_KEYWORDS = [
     "Bearer ",
 ]
 
-REPLACEMENT_TEXT = os.getenv("UNCLOGGER_REPLACEMENT", default="********")
-REPLACEMENT = getattr(hashlib, REPLACEMENT_TEXT, REPLACEMENT_TEXT)
+DEFAULT_REPLACEMENT: str = os.getenv("UNCLOGGER_REPLACEMENT", default="********")
 REPLACEMENT_MESSAGE = "#### WARNING: Log message replaced due to sensitive keyword: "
 
 
@@ -106,22 +127,27 @@ def _clean_up_sequence(data, logger):
 
 @_clean_up.register
 def _clean_up_dict(data: dict, logger):
-    sensitive_keys = set()
+    sensitive_keys: Iterable[str] = ()
     if hasattr(logger, "config") and hasattr(logger.config, "sensitive_keys"):
         sensitive_keys = logger.config.sensitive_keys
-    sensitive_fields = {field.lower() for field in [*SENSITIVE_FIELD_NAMES, *sensitive_keys]}
+    sensitive_fields = {field.lower() for field in [*SENSITIVE_FIELDS, *sensitive_keys]}
     cleaned_data = ChainMap({}, data)
+    replacement: ReplacementType = DEFAULT_REPLACEMENT
+    if hasattr(logger, "config") and hasattr(logger.config, "replacement"):
+        replacement = logger.config.replacement
     for key, value in cleaned_data.items():
         cleaned_data[key] = (
-            _replace(value) if key.lower() in sensitive_fields else _clean_up(value, logger)
+            _replace(value, replacement)
+            if key.lower() in sensitive_fields
+            else _clean_up(value, logger)
         )
     return dict(cleaned_data)
 
 
-def _replace(value: Any):
-    if callable(REPLACEMENT):
-        replaced = REPLACEMENT(str(value).encode())
-        if REPLACEMENT_TEXT.startswith("shake_"):
+def _replace(value: Any, replacement: ReplacementType):
+    if callable(replacement):
+        replaced = replacement(str(value).encode())
+        if "shake_" in replacement.__name__:
             return replaced.hexdigest(256)
         return replaced.hexdigest()
-    return REPLACEMENT
+    return replacement
