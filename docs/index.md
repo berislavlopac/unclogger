@@ -1,16 +1,26 @@
-# Unclogger
+# Introduction
 
-`unclogger` is a simple library for customisable structured logging. It mirrors the standard Python logging library API, with a few additional functionalities.
+**Unclogger** is a simple library for customisable structured logging. It mirrors the standard Python logging library API, with a few additional functionalities.
 
-!!! Info
+!!! Info "Implementation detail"
 
-    Implementation detail: `unclogger` is using the [Structlog library](https://www.structlog.org) under the hood.
+    Unclogger is using the [Structlog library](https://www.structlog.org) under the hood.
+
+??? Note
+
+    The JSON messages in examples below were formatted for convenience; in practice they are sent as a single line of text.
 
 ## Structured Loggers
 
-Passing keyword arguments to a log method will add them to the log data. Log data is converted to a JSON message before sending.
+Unclogger creates a logger object which adds one important functionality on top of the [standard logging library](https://docs.python.org/3/library/logging.html): in addition to a textual log message, any additional values passed to logging methods as keyword arguments will be included to the log context, along with a few standard fields:
 
-**Note:** The JSON in examples below was formatted for convenience; in practice it is sent as a single line of text.
+* `event`: The original textual log message.
+* `logger`: Name of the logger instance that created the message.
+* `level`: The [log level](https://docs.python.org/3/library/logging.html#logging-levels) of the message.
+* `timestamp`: Time date of the message in ISO 8601 format.
+
+The final logging context will be converted and emitted as a JSON-formatted message.
+
 
 !!! Example
 
@@ -51,7 +61,7 @@ The logger can be configured using the special attribute `config`. This can be u
     >>>
     ```
 
-As can be seen in the error message above, `config` is an instance of [SimpleNamespace](https://docs.python.org/3.10/library/types.html#types.SimpleNamespace).
+As can be seen in the error message above, `config` is an instance of [SimpleNamespace](https://docs.python.org/3/library/types.html#types.SimpleNamespace).
 
 
 ### Local Context

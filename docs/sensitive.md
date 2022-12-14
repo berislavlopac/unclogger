@@ -1,6 +1,6 @@
 # Handling Sensitive Data
 
-`unclogger` will automatically mask sensitive information such as PII, login credentials and the like. By default, the masked data is replaced by a generic string, which can be configured to use a hashing function instead.
+Unclogger will automatically mask sensitive information such as PII, login credentials and the like. By default, the masked data is replaced by a generic string, which can be configured to use a hashing function instead.
 
 
 ## Sensitive Fields
@@ -113,7 +113,7 @@ This can be used so that the data can still be identified (e.g. an email address
 
 !!! Warning
 
-    This functionality is intended to work out of the box with the functions present in the `hashlib` standard library. Any custom hash function has to accept a bytestring value and return a hash object as described in the [documentation](https://docs.python.org/3.10/library/hashlib.html). For typing purposes, `unclogger` provides a `Protocol` class for hash objects:
+    This functionality is intended to work out of the box with the functions present in the `hashlib` standard library. Any custom hash function has to accept a bytestring value and return a hash object as described in the [documentation](https://docs.python.org/3/library/hashlib.html). For typing purposes, `unclogger` provides a `Protocol` class for hash objects:
     
     ```python
     from unclogger.processors.clean_data import HashObjectProtocol
@@ -123,6 +123,12 @@ This can be used so that the data can still be identified (e.g. an email address
     ```
 
 ## Sensitive Text Values
+
+Unclogger also cleans up any text messages that contain certain keywords; any such message is completely replaced with a hardcoded warning message.
+
+!!! Warning
+
+    This functionality is currently incomplete, and cannot be configured. Use at your own risk.
 
 !!! Example
 

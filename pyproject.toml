@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "unclogger"
-repository = "https://github.com/berislavlopac/unclogger"
-documentation = "https://unclogger.readthedocs.io"
 version = "0.1.2"
 description = "Custom wrapper for enhanced structured logging."
 authors = ["Berislav Lopac <berislav@lopac.net>"]
+license = "MIT"
 readme = "README.md"
+homepage = "https://unclogger.readthedocs.io"
+repository = "https://github.com/berislavlopac/unclogger"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -48,14 +49,14 @@ fail_under = 90
 exclude_lines = [ "pragma: no cover", "@abstract",]
 
 [tool.black]
-line-length = 100
-target-version = ['py38', 'py39', 'py310']
+line-length = 96
+target-version = ['py38', 'py39', 'py310', 'py311']
 verbose = false
 skip-string-normalization = false
 
 [tool.isort]
 profile = "black"
-line_length = 100
+line_length = 96
 filter_files = true
 force_alphabetical_sort_within_sections = true
 
