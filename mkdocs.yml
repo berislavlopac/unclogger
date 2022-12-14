@@ -1,6 +1,6 @@
 site_name: Unclogger
 repo_url: https://github.com/berislavlopac/unclogger
-site_description: Simple library for customisable structured logging.]
+site_description: Simple library for customisable structured logging.
 site_author: Berislav Lopac <berislav@lopac.net>
 use_directory_urls: false
 theme:

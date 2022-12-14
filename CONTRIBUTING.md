@@ -51,3 +51,9 @@ $ mkdocs build
 ```
 
 This will create the HTML documentation in the `site` directory.
+
+The online documentation is built and hosted on ReadTheDocs, and configured in the `.readthedocs.yaml` file. The requirements file used for ReadTheDocs builds is located at `docs/requirements.txt`; to update it using Poetry run the following command:
+
+```shell
+$ poetry export -o docs/requirements.txt --with=docs --without-hashes --without-urls
+```

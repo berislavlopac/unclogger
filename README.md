@@ -3,6 +3,8 @@ Unclogger
 
 Simple Python library for customizable structured logging.
 
+[![Documentation Status](https://readthedocs.org/projects/unclogger/badge/?version=latest)](https://unclogger.readthedocs.io/en/latest/?badge=latest)
+
 ## Quick Intro
 
  ```python
