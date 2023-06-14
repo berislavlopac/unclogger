@@ -25,5 +25,4 @@ markdown_extensions:
       guess_lang: no
 nav:
   - index.md
-  - sensitive.md
   - reference.md

@@ -41,7 +41,7 @@ The final logging context will be converted and emitted as a JSON-formatted mess
 
 ### Configuration
 
-The logger can be configured using the special attribute `config`. This can be used for configuring additional functionality, e.g. when [handling sensitive data](sensitive.md).
+The logger can be configured using the special attribute `config`. This can be used for configuring additional functionality.
 
 !!! Example
 
