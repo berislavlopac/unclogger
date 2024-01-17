@@ -1,8 +1,7 @@
 import json
-from decimal import Decimal
 
 from unclogger import get_logger
-from unclogger.processors.clean_data import clean_sensitive_data, DEFAULT_REPLACEMENT
+from unclogger.processors.clean_data import clean_sensitive_data
 
 
 def test_example_log_message_from_auth_is_cleaned_correctly(caplog):
@@ -39,7 +38,8 @@ def test_message_with_Bearer_in_text_is_cleaned_correctly(caplog):
     record = json.loads(caplog.messages[0])
     assert len(record) == 4
     assert (
-        record["event"] == "#### WARNING: Log message replaced due to sensitive keyword: 'Bearer "
+        record["event"]
+        == "#### WARNING: Log message replaced due to sensitive keyword: 'Bearer "
     )
     assert record["level"] == "info"
     assert record["logger"] == logger_name
@@ -57,7 +57,8 @@ def test_message_with_Refresh_in_text_is_cleaned_correctly(caplog):
     record = json.loads(caplog.messages[0])
     assert len(record) == 4
     assert (
-        record["event"] == "#### WARNING: Log message replaced due to sensitive keyword: 'Refresh':"
+        record["event"]
+        == "#### WARNING: Log message replaced due to sensitive keyword: 'Refresh':"
     )
     assert record["level"] == "info"
     assert record["logger"] == logger_name

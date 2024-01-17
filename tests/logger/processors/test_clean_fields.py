@@ -12,10 +12,7 @@ def test_message_with_password_and_email_is_cleaned_correctly(caplog):
     logger_name = "test logger"
 
     logger = get_logger(logger_name)
-    request = {
-        "Email": "user@domain.xyz",
-        "password": "this is a sensitive value",
-    }
+    request = {"Email": "user@domain.xyz", "password": "this is a sensitive value"}
 
     logger.info(message, request=request)
 
@@ -32,10 +29,7 @@ def test_message_with_password_and_email_in_event_is_cleaned_correctly(caplog):
     caplog.set_level("INFO")
 
     logger_name = "test logger"
-    message = {
-        "email": "user@domain.xyz",
-        "password": "this is a sensitive value",
-    }
+    message = {"email": "user@domain.xyz", "password": "this is a sensitive value"}
 
     logger = get_logger(logger_name)
     logger.info(message)

@@ -81,7 +81,8 @@ def get_logger(name: Optional[str] = None) -> Unclogger:
 
 
 def context_bind(**kwargs: Any) -> None:
-    """Inserts data into the global logging context.
+    """
+    Inserts data into the global logging context.
 
     Args:
         kwargs: Any keyword argument will be inserted into the global context.
@@ -90,7 +91,8 @@ def context_bind(**kwargs: Any) -> None:
 
 
 def context_clear(*args: str) -> None:
-    """Remove variables from context.
+    """
+    Remove variables from context.
 
     Args:
         args: Keys for context variables to clear. If absent, all

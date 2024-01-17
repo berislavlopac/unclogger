@@ -8,8 +8,9 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+BUILD_NUMBER/
 develop-eggs/
+build/
 dist/
 downloads/
 eggs/
@@ -92,16 +93,20 @@ ipython_config.py
 #   intended to run in multiple environments; otherwise, check them in:
 .python-version
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+# lock files
+#   According to pypa/pipenv#598, it is recommended to include the lock file in version control.
 #   However, in case of collaboration, if having platform-specific dependencies or dependencies
 #   having no cross-platform support, pipenv may install dependencies that don't work, or not
 #   install all needed dependencies.
 #Pipfile.lock
-
-# poetry
-# same reasoning as for Pipenv applies here
 poetry.lock
+requirements.txt
+requirements.in
+pdm.lock
+
+# other tools
+.pdm-python
+.pdm-build
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
@@ -115,6 +120,7 @@ celerybeat.pid
 
 # Environments
 .env
+.envrc
 .venv
 env/
 venv/
@@ -142,8 +148,6 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
-
-
 
 # PyCharm stuff
 .idea
@@ -180,7 +184,7 @@ docker-compose.override.yml
 .skip-hooks
 
 tmp/
-
+.ruff_cache
 
 # run configurations
 .run/
@@ -188,3 +192,10 @@ tmp/
 
 # kube manifest
 helm/baked_manifest.yaml
+
+# local storage
+_storage
+database.json
+
+# localstack cache
+volume/cache
