@@ -17,7 +17,7 @@ Contributing Guidelines
 During development, the command `pdm run checks` will execute a number of checks and tests on the library codebase:
 
 * code linting check using `ruff`
-* code format check using `black`
+* code format check using `ruff format`
 * import statement sorting check using `isort`
 * documentation styling check using `pydocstyle`
 
@@ -26,7 +26,13 @@ The full unit test suite can be executed with `pdm run tests`.
 
 ## API Documentation
 
-The project documentation can be served locally by running:
+To preview the documentation locally, first install the dependencies:
+
+```shell
+$ pdm install -G docs
+```
+
+The project documentation can then be served locally by running:
 
 ```shell
 $ mkdocs serve
@@ -39,9 +45,3 @@ $ mkdocs build
 ```
 
 This will create the HTML documentation in the `site` directory.
-
-The online documentation is built and hosted on ReadTheDocs, and configured in the `.readthedocs.yaml` file. The requirements file used for ReadTheDocs builds is located at `docs/requirements.txt`; to update it using Poetry run the following command:
-
-```shell
-$ poetry export -o docs/requirements.txt --with=docs --without-hashes --without-urls
-```
