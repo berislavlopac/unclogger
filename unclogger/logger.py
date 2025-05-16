@@ -2,7 +2,7 @@
 
 import logging as _std_logging
 from types import SimpleNamespace
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import structlog
 
@@ -43,7 +43,7 @@ structlog.configure(
 )
 
 
-def set_level(level: Union[int, str] = _std_logging.INFO) -> None:
+def set_level(level: int | str = _std_logging.INFO) -> None:
     """
     Sets the global logging level.
 
@@ -63,7 +63,7 @@ def set_level(level: Union[int, str] = _std_logging.INFO) -> None:
     _std_logging.getLogger().setLevel(level=level)
 
 
-def get_logger(name: Optional[str] = None) -> Unclogger:
+def get_logger(name: str | None = None) -> Unclogger:
     """
     Retrieve a logger instance.
 

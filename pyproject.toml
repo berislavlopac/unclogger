@@ -1,13 +1,13 @@
 [project]
 name = "unclogger"
-version = "0.1.3"
+version = "0.2.0"
 description = "Custom wrapper for enhanced structured logging."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
     {name = "Berislav Lopac", email = "berislav@lopac.net"},
 ]
-requires-python = ">=3.9,<4.0"
+requires-python = ">=3.10,<4.0"
 dependencies = [
     "structlog>=24.1",
 ]

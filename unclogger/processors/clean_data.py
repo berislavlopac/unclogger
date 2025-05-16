@@ -5,10 +5,10 @@ from __future__ import annotations
 import json
 import os
 from collections import ChainMap
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from decimal import Decimal
 from functools import singledispatch
-from typing import Any, Callable, Protocol, Union
+from typing import Any, Protocol
 
 from structlog.types import EventDict, WrappedLogger
 
@@ -84,7 +84,7 @@ class HashObjectProtocol(Protocol):
         """
 
 
-ReplacementType = Union[str, Callable[[bytes], HashObjectProtocol]]
+ReplacementType = str | Callable[[bytes], HashObjectProtocol]
 
 SENSITIVE_FIELDS = [
     "password",
