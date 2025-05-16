@@ -1,13 +1,14 @@
 """Custom processor for cleaning sensitive data."""
-# pylint: disable=unused-argument
+
 from __future__ import annotations
 
 import json
 import os
 from collections import ChainMap
+from collections.abc import Iterable
 from decimal import Decimal
 from functools import singledispatch
-from typing import Any, Callable, Iterable, Optional, Protocol, Union
+from typing import Any, Callable, Protocol, Union
 
 from structlog.types import EventDict, WrappedLogger
 
@@ -45,7 +46,7 @@ class HashObjectProtocol(Protocol):
         sharing a common initial substring.
         """
 
-    def digest(self, length: Optional[int] = None) -> str:
+    def digest(self, length: int | None = None) -> str:  # noqa: F841
         """
         Return the digest of the data passed to the update() method so far.
 
@@ -60,7 +61,7 @@ class HashObjectProtocol(Protocol):
             length: Optional length in bytes, required of SHAKE algorithms.
         """
 
-    def hexdigest(self, length: Optional[int] = None) -> str:
+    def hexdigest(self, length: int | None = None) -> str:  # noqa: F841
         """
         Like `digest()`, except containing only hexadecimal digits.
 
@@ -71,7 +72,7 @@ class HashObjectProtocol(Protocol):
             length: Optional length in bytes, required of SHAKE algorithms.
         """
 
-    def update(self, obj: bytes, /) -> None:
+    def update(self, obj: bytes, /) -> None:  # noqa: F841
         """
         Update the hash object with the bytes-like object.
 

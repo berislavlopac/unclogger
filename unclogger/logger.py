@@ -2,7 +2,7 @@
 
 import logging as _std_logging
 from types import SimpleNamespace
-from typing import Any, cast, Optional, Union
+from typing import Any, Optional, Union, cast
 
 import structlog
 
@@ -18,8 +18,8 @@ class Unclogger(structlog.stdlib.BoundLogger):
     def config(self) -> SimpleNamespace:
         """Simple configuration object for custom logger functionality."""
         if not hasattr(self._logger, "config"):
-            setattr(self._logger, "config", SimpleNamespace())
-        return getattr(self._logger, "config")
+            self._logger.config = SimpleNamespace()  # type: ignore[attr-defined]
+        return self._logger.config  # type: ignore[attr-defined]
 
 
 structlog.configure(
@@ -59,7 +59,7 @@ def set_level(level: Union[int, str] = _std_logging.INFO) -> None:
     if isinstance(level, str):
         level = int(level) if level.isdigit() else _std_logging.getLevelName(level.upper())
     if not isinstance(level, int):
-        raise ValueError(f"Incorrect log level '{level}'")
+        raise ValueError(f"Incorrect log level '{level}'")  # noqa: TRY003, TRY004
     _std_logging.getLogger().setLevel(level=level)
 
 

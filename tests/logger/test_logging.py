@@ -103,6 +103,7 @@ def test_keyword_arguments_are_included_in_log_output(caplog, log_method):
     assert record["level"] == log_level.lower()
     assert record["logger"] == logger_name
     assert "timestamp" in record
+    assert record == {}
     assert record["foo"] == 123
     assert record["bar"] == "abc"
 
@@ -115,7 +116,7 @@ def test_exception_traceback_is_included_in_log_output_on_level_ERROR(caplog):
     logger = get_logger(logger_name)
 
     try:
-        raise RuntimeError("this is an error")
+        raise RuntimeError("this is an error")  # noqa: TRY301, TRY003
     except RuntimeError:
         logger.exception(message, foo=123, bar="abc")
 

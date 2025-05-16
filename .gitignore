@@ -103,6 +103,7 @@ poetry.lock
 requirements.txt
 requirements.in
 pdm.lock
+uv.lock
 
 # other tools
 .pdm-python

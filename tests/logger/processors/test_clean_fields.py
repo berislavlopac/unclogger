@@ -2,7 +2,7 @@ import json
 from decimal import Decimal
 
 from unclogger import get_logger
-from unclogger.processors.clean_data import clean_sensitive_data, DEFAULT_REPLACEMENT
+from unclogger.processors.clean_data import DEFAULT_REPLACEMENT, clean_sensitive_data
 
 
 def test_message_with_password_and_email_is_cleaned_correctly(caplog):
