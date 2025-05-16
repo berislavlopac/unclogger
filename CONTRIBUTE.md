@@ -3,45 +3,52 @@ Contributing Guidelines
 
 ## Development Environment
 
-[PDM](https://pdm-project.org) is used for dependency and package management. The steps for setting up the development environment:
+To manage packaging and dependencies, please [install `uv` first](https://docs.astral.sh/uv/getting-started/installation/).
 
-1. Install PDM: either [globally](https://pdm-project.org/latest/#recommended-installation-method), or in a Python virtual environment (using `pip install pdm`).
+Tu run development scripts, please [install `just`](https://just.systems/man/en/). To display the list of all `just` commands (a.k.a. recipes), run `just`:
 
-3. Install the project (if outside a virtual environment, PDM will create one):
-
-        $ pdm install
+```shell
+$ just
+Available recipes:
+    help       # List available recipes.
+    test       # Run unit tests.
+    test-cov   # Run unit tests with coverage report.
+    lint       # Run linting and formating checks.
+    type       # Run static typing analysis.
+    analyze    # Run security checks.
+    check      # Run all checks.
+    commits    # Extract the latest commits
+    reformat   # Reformat the code using isort and ruff.
+    docs       # Serve documentation website for development purposes.
+    docs-build # Build the documentation website.
+    reqs       # Extract current production requirements. Save to a file by appending `> requirements.txt`.
+```
 
 
 ### Development Checks
 
-During development, the command `pdm run checks` will execute a number of checks and tests on the library codebase:
+During development, the command `just check` will execute a number of checks and tests on the library codebase:
 
+* correct dependency declarations using `deptry`
 * code linting check using `ruff`
 * code format check using `ruff format`
-* import statement sorting check using `isort`
 * documentation styling check using `pydocstyle`
 
-The full unit test suite can be executed with `pdm run tests`.
+The full unit test suite can be executed with `just test`.
 
 
 ## API Documentation
 
-To preview the documentation locally, first install the dependencies:
-
-```shell
-$ pdm install -G docs
-```
-
 The project documentation can then be served locally by running:
 
 ```shell
-$ mkdocs serve
+$ just docs
 ```
 
 To build the static documentation site, run:
 
 ```shell
-$ mkdocs build
+$ just docs-build
 ```
 
 This will create the HTML documentation in the `site` directory.

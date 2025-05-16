@@ -1,5 +1,5 @@
 import uuid
-from datetime import UTC, date, datetime
+from datetime import date, datetime, timezone
 
 from unclogger.defaults import json_default
 
@@ -10,7 +10,7 @@ def test_json_default_formats_date_correctly():
 
 
 def test_json_default_formats_datetime_correctly():
-    example_date = datetime(2008, 5, 5, hour=11, minute=45, tzinfo=UTC)
+    example_date = datetime(2008, 5, 5, hour=11, minute=45, tzinfo=timezone.utc)
     assert json_default(example_date) == "2008-05-05T11:45:00+00:00Z"
 
 

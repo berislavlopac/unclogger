@@ -41,9 +41,13 @@ reformat:
     uv run ruff format .
     uv run ruff check --select I --fix .
 
-# Serve documentation website for development purposes
+# Serve documentation website for development purposes.
 docs:
-    uv run mkdocs serve
+    uv run --extra docs mkdocs serve
+
+# Build the documentation website.
+docs-build:
+    uv run --extra docs mkdocs build
 
 # Extract current production requirements. Save to a file by appending `> requirements.txt`.
 reqs:
