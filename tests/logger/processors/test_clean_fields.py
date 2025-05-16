@@ -156,6 +156,7 @@ def test_adding_custom_sensitive_keywords_on_runtime_cleans_output_correctly(cap
     record = json.loads(caplog.messages[0])
     assert record["illegalKey"] == DEFAULT_REPLACEMENT
     assert record["context_id"] == "cxt_fe76c000000000000000000_0000000000000"
+    logger.config.sensitive_keys = {}
 
 
 def test_setting_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
@@ -171,6 +172,8 @@ def test_setting_custom_sensitive_keywords_on_runtime_cleans_output_correctly(ca
     record = json.loads(caplog.messages[0])
     assert record["illegalKey"] == DEFAULT_REPLACEMENT
     assert record["context_id"] == "cxt_fe76c000000000000000000_0000000000000"
+
+    logger.config.sensitive_keys = {}
 
 
 def test_changing_custom_sensitive_keywords_on_runtime_cleans_output_correctly(caplog):
@@ -192,3 +195,5 @@ def test_changing_custom_sensitive_keywords_on_runtime_cleans_output_correctly(c
     assert fully_cleaned_record["payload"]["foo"] == DEFAULT_REPLACEMENT
     assert fully_cleaned_record["payload"]["bar"] == DEFAULT_REPLACEMENT
     assert fully_cleaned_record["payload"]["fooBar"] == DEFAULT_REPLACEMENT
+
+    logger.config.sensitive_keys = {}

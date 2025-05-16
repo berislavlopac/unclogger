@@ -103,7 +103,6 @@ def test_keyword_arguments_are_included_in_log_output(caplog, log_method):
     assert record["level"] == log_level.lower()
     assert record["logger"] == logger_name
     assert "timestamp" in record
-    assert record == {}
     assert record["foo"] == 123
     assert record["bar"] == "abc"
 
