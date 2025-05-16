@@ -2,9 +2,9 @@
 
 ## Logger
 
-### ![mkapi](unclogger.get_logger)
+::: unclogger.get_logger
 
-### ![mkapi](unclogger.context_bind)
+::: unclogger.context_bind
 
 ## Global Log Level Configuration
 
@@ -34,10 +34,10 @@
     >>>
     ```
 
-### ![mkapi](unclogger.set_level)
+::: unclogger.set_level
 
 ## Processors
 
 ### Sensitive Data
 
-#### ![mkapi](unclogger.processors.clean_data.clean_sensitive_data)
+::: unclogger.processors.clean_data.clean_sensitive_data
