@@ -146,3 +146,30 @@ The [`context_bind`](reference.md#unclogger.context_bind) function will set valu
     }
     >>>
     ```
+
+## Custom Processors
+
+It is possible to add other `structlog` processors into the logger configuration. For example, to hide sensitive information that might be present in the logged data (using the [Sanitary](https://sanitary.readthedocs.io) library as an example):
+
+!!! Example
+
+    ```python
+    >>> from sanitary import StructlogSanitizer
+    >>> from unclogger import add_processors, get_logger
+    >>>
+    >>> add_processors(StructlogSanitizer(keys={"password", "email"}))
+    >>>
+    >>> logger = get_logger("test logger")
+    >>> logger.info("test test", foo="abc", email="test@example.com", password="myPa55w0rd")
+    {
+        "foo": "abc", 
+        "email": "********",
+        "password": "********",
+        "event": "test test", 
+        "logger": "test logger", 
+        "level": "info", 
+        "timestamp": "2021-02-12T22:40:07.600385Z"
+    }
+    >>>
+    ```
+

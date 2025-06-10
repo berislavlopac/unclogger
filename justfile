@@ -1,5 +1,3 @@
-dotenv-filename := ".env"
-
 # List available recipes.
 help:
     @just --list --unsorted

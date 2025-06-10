@@ -6,8 +6,8 @@ from typing import Any, cast
 
 import structlog
 
-from .defaults import json_default
-from .processors import clean_sensitive_data
+import unclogger.processors
+from unclogger.defaults import json_default
 
 
 # aliasing the type
@@ -25,14 +25,14 @@ class Unclogger(structlog.stdlib.BoundLogger):
 structlog.configure(
     processors=[
         structlog.stdlib.filter_by_level,
-        structlog.contextvars.merge_contextvars,  # type: ignore
+        structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
-        clean_sensitive_data,
+        unclogger.processors.run_custom_processors,
         structlog.processors.UnicodeDecoder(),
         structlog.processors.JSONRenderer(default=json_default),
     ],

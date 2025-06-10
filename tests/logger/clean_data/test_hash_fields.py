@@ -3,11 +3,10 @@ import json
 
 import pytest
 
-from unclogger import get_logger
+from unclogger import add_processors, get_logger, processors
 
 
-def _expected(value, hash_algo):
-    hash_function = getattr(hashlib, hash_algo)
+def _expected(value, hash_function):
     hashed = hash_function(value.encode())
     try:
         return hashed.hexdigest()
@@ -16,14 +15,17 @@ def _expected(value, hash_algo):
 
 
 @pytest.mark.parametrize("hash_algo", hashlib.algorithms_guaranteed)
-def test_message_with_password_and_email_is_hashed_correctly(caplog, monkeypatch, hash_algo):
+def test_message_with_password_and_email_is_hashed_correctly(caplog, hash_algo, sanitary_hash):
+    processors.CUSTOM_PROCESSORS = []
+    hash_function = getattr(hashlib, hash_algo)
+
+    add_processors(sanitary_hash(hash_function))
     caplog.set_level("INFO")
 
     message = "Test with request password"
-    logger_name = "test logger"
+    logger_name = __name__
 
     logger = get_logger(logger_name)
-    logger.config.replacement = getattr(hashlib, hash_algo)
 
     request = {
         "email": "user@domain.xyz",
@@ -38,5 +40,5 @@ def test_message_with_password_and_email_is_hashed_correctly(caplog, monkeypatch
     assert record["level"] == "info"
     assert record["logger"] == logger_name
     assert record["request"]["safe_value"] == request["safe_value"]
-    assert record["request"]["password"] == _expected(request["password"], hash_algo)
-    assert record["request"]["email"] == _expected(request["email"], hash_algo)
+    assert record["request"]["password"] == _expected(request["password"], hash_function)
+    assert record["request"]["email"] == _expected(request["email"], hash_function)

@@ -2,7 +2,8 @@
 
 import logging as _std_logging
 
-from .logger import Unclogger, context_bind, context_clear, get_logger, set_level
+from unclogger.logger import Unclogger, context_bind, context_clear, get_logger, set_level
+from unclogger.processors import add_processors
 
 getLogger = get_logger  # alias for compatibility with standard logging  # noqa: N816
 

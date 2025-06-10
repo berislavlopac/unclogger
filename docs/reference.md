@@ -36,8 +36,6 @@
 
 ::: unclogger.set_level
 
-## Processors
+## Custom Processors
 
-### Sensitive Data
-
-::: unclogger.processors.clean_data.clean_sensitive_data
+::: unclogger.processors.add_processors
