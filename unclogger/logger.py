@@ -63,7 +63,7 @@ def set_level(level: int | str = _std_logging.INFO) -> None:
     _std_logging.getLogger().setLevel(level=level)
 
 
-def get_logger(name: str | None = None) -> Unclogger:
+def get_logger(name: str | None = None, level: int | None = None) -> Unclogger:
     """
     Retrieve a logger instance.
 
@@ -76,8 +76,11 @@ def get_logger(name: str | None = None) -> Unclogger:
 
     Args:
         name: Optional name for the logger.
+        level: Optional logging level.
     """
-    return cast(Unclogger, structlog.stdlib.get_logger(name).bind())
+    logger = structlog.stdlib.get_logger(name).bind()
+    logger.setLevel(level if level is not None else _std_logging.root.level)
+    return cast(Unclogger, logger)
 
 
 def context_bind(**kwargs: Any) -> None:
