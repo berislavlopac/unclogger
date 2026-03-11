@@ -1,6 +1,6 @@
 [project]
 name = "unclogger"
-version = "0.2.0"
+version = "0.2.1"
 description = "Custom wrapper for enhanced structured logging."
 readme = "README.md"
 license = {text = "MIT"}
