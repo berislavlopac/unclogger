@@ -4,11 +4,11 @@ help:
 
 # Run unit tests.
 test:
-    uv run pytest --spec
+    uv run --all-extras pytest --spec
 
 # Run unit tests with coverage report.
 test-cov:
-    uv run pytest --cov --spec
+    uv run --all-extras pytest --cov --spec
 
 # Run linting and formating checks.
 lint:
