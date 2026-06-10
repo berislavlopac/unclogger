@@ -1,7 +1,10 @@
 import re
 
 import pytest
-from sanitary import StructlogSanitizer
+
+# `sanitary` is an optional extra; skip the integration tests if it is absent
+# rather than erroring the whole suite at collection time.
+StructlogSanitizer = pytest.importorskip("sanitary").StructlogSanitizer
 
 SENSITIVE_KEYS = [
     "password",
