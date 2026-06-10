@@ -73,8 +73,8 @@ PRs it runs the `checks` env and the py310–313 test matrix via
 `hatch-vcs` (`pyproject.toml` declares `dynamic = ["version"]`) — never hand-edit a
 version. `just release <ver>` collates the `towncrier` fragments into `CHANGELOG.md`,
 commits, tags, and pushes; the tag then triggers the CI `publish` job, which builds,
-uploads to PyPI (token secret `PYPI_API_TOKEN`), and creates the GitHub release from
-the new changelog section. See `CONTRIBUTE.md` for the full flow.
+uploads to PyPI via trusted publishing (OIDC — no stored token), and creates the
+GitHub release from the new changelog section. See `CONTRIBUTE.md` for the full flow.
 
 ## Conventions
 

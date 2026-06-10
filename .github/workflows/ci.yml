@@ -46,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # create the GitHub release
+      id-token: write  # PyPI trusted publishing (OIDC)
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -58,8 +59,10 @@ jobs:
       # Extract notes first: a missing changelog section aborts before publishing.
       - run: python scripts/extract_changelog.py "$GITHUB_REF_NAME" /tmp/release-notes.txt
       - run: uv build
+      # Trusted publishing via OIDC (no stored token); requires id-token: write
+      # above and a configured trusted publisher on PyPI for this repo + workflow.
       # --check-url lets a re-run skip files already on PyPI instead of failing.
-      - run: uv publish --token "${{ secrets.PYPI_API_TOKEN }}" --check-url https://pypi.org/simple/unclogger/
+      - run: uv publish --trusted-publishing always --check-url https://pypi.org/simple/unclogger/
       - name: Create or update the GitHub release
         run: |
           PRERELEASE=""
