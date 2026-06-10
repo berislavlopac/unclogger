@@ -4,7 +4,11 @@
 
 ::: unclogger.get_logger
 
+::: unclogger.Unclogger
+
 ::: unclogger.context_bind
+
+::: unclogger.context_clear
 
 ## Global Log Level Configuration
 

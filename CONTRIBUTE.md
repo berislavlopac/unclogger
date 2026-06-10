@@ -31,14 +31,16 @@ Available recipes:
 
 ### Development Checks
 
-During development, the command `just check` will execute a number of checks and tests on the library codebase:
+During development, the command `just check` will execute a number of checks on the library codebase:
 
 * correct dependency declarations using `deptry`
 * code linting check using `ruff`
 * code format check using `ruff format`
 * documentation styling check using `pydocstyle`
+* static type analysis using `pyrefly`
+* dead-code detection using `vulture` and maintainability scoring using `radon`
 
-The full unit test suite can be executed with `just test`.
+The full unit test suite is run separately with `just test`.
 
 
 ## Changelog and news fragments

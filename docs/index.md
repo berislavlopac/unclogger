@@ -53,7 +53,7 @@ The logger can be configured using the special attribute `config`. This can be u
     >>> print(logger.config.foo)
     foo
     >>> print(logger.config.bar)
-    foo
+    bar
     >>> print(logger.config.baz)
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
@@ -86,6 +86,7 @@ Each logger has a local context; values can be bound to it so they can appear in
     >>> # let's bind some more
     >>> import uuid
     >>> logger = logger.bind(some_uuid=uuid.uuid4())
+    >>> logger.info("test test", foo="abc", bar=123)
     {
         "abc": "def", 
         "some_uuid": "88227c28-f5a6-430a-bdee-9e967c6c8d13",
@@ -146,6 +147,8 @@ The [`context_bind`](reference.md#unclogger.context_bind) function will set valu
     }
     >>>
     ```
+
+The matching [`context_clear`](reference.md#unclogger.context_clear) function removes all values from the global context.
 
 ## Custom Processors
 
