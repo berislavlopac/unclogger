@@ -4,7 +4,7 @@ site_description: Simple library for customisable structured logging.
 site_author: Berislav Lopac <berislav@lopac.net>
 use_directory_urls: false
 theme:
-  name: material
+  name: materialx
   logo: assets/plunger-logo.png
   favicon: assets/plunger-favicon.png
   features:

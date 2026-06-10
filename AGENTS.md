@@ -94,7 +94,7 @@ PRs it runs the `checks` env and the py310–313 test matrix via
 
 ## Docs
 
-Docs live in `docs/` (mkdocs + Material + `mkapi`), hosted on readthedocs.
+Docs live in `docs/` (mkdocs + MaterialX + `mkapi`), hosted on readthedocs.
 `docs/reference.md` autogenerates the API reference from docstrings via `mkapi`
 `:::` directives, so keep docstrings accurate. The `sanitary` library is used as
 the worked example for custom processors — keep that example in sync if the
