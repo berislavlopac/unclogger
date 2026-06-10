@@ -7,6 +7,13 @@ into a dated section by `towncrier` at release time — see `just release`.
 
 <!-- towncrier release notes start -->
 
+## [0.2.2] - 2026-06-10
+
+### Fixed
+
+- Custom processor execution order is now deterministic (insertion order), while still deduplicating processors. (#1)
+
+
 ## [0.2.1] - 2026-03-11
 - Use a set for custom processors to ensure uniqueness
 
