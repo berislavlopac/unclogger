@@ -4,7 +4,9 @@ from collections.abc import Callable
 
 from structlog.types import EventDict, WrappedLogger
 
-CUSTOM_PROCESSORS: set[Callable[[WrappedLogger, str, EventDict], EventDict]] = set()
+# A dict (with `None` values) rather than a set: dicts preserve insertion order, so
+# registered processors run in a deterministic order, while still deduping by identity.
+CUSTOM_PROCESSORS: dict[Callable[[WrappedLogger, str, EventDict], EventDict], None] = {}
 
 
 def add_processors(*args: Callable[[WrappedLogger, str, EventDict], EventDict]) -> None:
@@ -18,7 +20,7 @@ def add_processors(*args: Callable[[WrappedLogger, str, EventDict], EventDict]) 
         args: One or more callables conforming to the Structlog processor signature.
     """
     for arg in args:
-        CUSTOM_PROCESSORS.add(arg)
+        CUSTOM_PROCESSORS[arg] = None
 
 
 def run_custom_processors(logger: WrappedLogger, name: str, event_dict: EventDict) -> EventDict:
