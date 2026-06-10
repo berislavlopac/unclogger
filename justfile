@@ -10,7 +10,7 @@ test:
 test-cov:
     uv run --all-extras pytest --cov --spec
 
-# Run linting and formating checks.
+# Run linting and formatting checks.
 lint:
     uv run deptry .
     uv run ruff format --check .
@@ -21,7 +21,7 @@ lint:
 type:
     uv run mypy --install-types --non-interactive unclogger/
 
-# Run security checks.
+# Run dead-code and maintainability analysis.
 analyze:
     uvx vulture --min-confidence 100 unclogger/
     uvx radon mi --show --multi --min B unclogger/
@@ -33,7 +33,7 @@ check: lint type analyze
 commits:
     git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-decorate
 
-# Reformat the code using isort and ruff.
+# Reformat the code and sort imports using ruff.
 [confirm]
 reformat:
     uv run ruff format .

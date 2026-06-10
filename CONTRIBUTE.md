@@ -5,7 +5,7 @@ Contributing Guidelines
 
 To manage packaging and dependencies, please [install `uv` first](https://docs.astral.sh/uv/getting-started/installation/).
 
-Tu run development scripts, please [install `just`](https://just.systems/man/en/). To display the list of all `just` commands (a.k.a. recipes), run `just`:
+To run development scripts, please [install `just`](https://just.systems/man/en/). To display the list of all `just` commands (a.k.a. recipes), run `just`:
 
 ```shell
 $ just
@@ -13,12 +13,12 @@ Available recipes:
     help       # List available recipes.
     test       # Run unit tests.
     test-cov   # Run unit tests with coverage report.
-    lint       # Run linting and formating checks.
+    lint       # Run linting and formatting checks.
     type       # Run static typing analysis.
-    analyze    # Run security checks.
+    analyze    # Run dead-code and maintainability analysis.
     check      # Run all checks.
     commits    # Extract the latest commits
-    reformat   # Reformat the code using isort and ruff.
+    reformat   # Reformat the code and sort imports using ruff.
     docs       # Serve documentation website for development purposes.
     docs-build # Build the documentation website.
     reqs       # Extract current production requirements. Save to a file by appending `> requirements.txt`.
