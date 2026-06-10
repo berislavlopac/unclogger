@@ -50,3 +50,25 @@ docs-build:
 # Extract current production requirements. Save to a file by appending `> requirements.txt`.
 reqs:
     uv export --no-default-groups
+
+# Add a news fragment: `just news added` (auto id) or `just news fixed 42` (issue ref).
+news type id=('+' + datetime('%s')):
+    uv run towncrier create --edit {{id}}.{{type}}.md
+
+# Preview the collated changelog for a version without writing it.
+changelog-draft version:
+    uv run towncrier build --draft --version {{version}}
+
+# Suggest the next version from the pending news fragments (advisory).
+suggest-version:
+    uv run python scripts/suggest_version.py
+
+# Validate, collate the changelog, commit, tag, and push a release (see CONTRIBUTE.md).
+[confirm]
+release version: check test
+    @test -n "$(find release-notes -type f ! -name README.md)" || { echo "No news fragments in release-notes/ — use a direct tag for migration releases."; exit 1; }
+    uv run towncrier build --yes --version {{version}}
+    git add CHANGELOG.md release-notes
+    git commit -m "release {{version}}"
+    git tag -a {{version}} -m "release {{version}}"
+    git push --follow-tags origin HEAD

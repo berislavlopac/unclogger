@@ -26,14 +26,17 @@ dependant, so it changes only deliberately and with a release note.
   structlog chain, before the JSON renderer).
 - `unclogger/defaults.py` — `json_default`, a `singledispatch` JSON serialiser for
   `UUID` / `datetime` / `date` / `Decimal`.
-- `tests/` — pytest suite. `docs/` — mkdocs source. `release-notes/` — per-version notes.
+- `tests/` — pytest suite. `docs/` — mkdocs source.
+- `release-notes/` — `towncrier` news fragments (`<id>.<type>.md`), collated into
+  `CHANGELOG.md` at release time. `scripts/` — release helpers (`suggest_version.py`,
+  `extract_changelog.py`).
 
 ## Public API (the contract)
 
 Exported from `unclogger`: `get_logger`, `context_bind`, `context_clear`,
 `set_level`, `add_processors`, `Unclogger`. Keep these stable. Anything else is
-internal and may change. Update `docs/reference.md` and add a `release-notes/`
-entry when the public API changes.
+internal and may change. Update `docs/reference.md` and add a news fragment
+(`just news <type>`) when the public API changes.
 
 ## Environment & workflow
 
@@ -55,12 +58,23 @@ entry when the public API changes.
 | `just reformat` | Auto-fix format + import order (`[confirm]` recipe). |
 | `just docs` / `just docs-build` | Serve / build the mkdocs site. |
 | `just commits` | Commits since the last tag (for release notes). |
+| `just news <type> [id]` | Create a `towncrier` news fragment. |
+| `just changelog-draft <ver>` | Preview the collated changelog (no write). |
+| `just suggest-version` | Recommend the next version from pending fragments. |
+| `just release <ver>` | Collate changelog, commit, tag, push (`[confirm]`). |
 
 Multi-version testing (py310–313) is via **tox** (`tox.ini`, `uv-venv-lock-runner`).
 The pre-push quality gate is `just check` + `just test`, or the full `tox` matrix.
 CI is **GitHub Actions** (`.github/workflows/ci.yml`): on push to `main` and on
 PRs it runs the `checks` env and the py310–313 test matrix via
 `uvx --with tox-uv tox` — the same tox envs you run locally.
+
+**Releases are tag-driven.** The version is single-sourced from the git tag via
+`hatch-vcs` (`pyproject.toml` declares `dynamic = ["version"]`) — never hand-edit a
+version. `just release <ver>` collates the `towncrier` fragments into `CHANGELOG.md`,
+commits, tags, and pushes; the tag then triggers the CI `publish` job, which builds,
+uploads to PyPI (token secret `PYPI_API_TOKEN`), and creates the GitHub release from
+the new changelog section. See `CONTRIBUTE.md` for the full flow.
 
 ## Conventions
 
