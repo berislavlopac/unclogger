@@ -18,8 +18,7 @@ coverage.xml
 .pytest_cache/
 test-reports/
 
-# Type checker / linter caches
-.mypy_cache/
+# Linter cache
 .ruff_cache/
 
 # Lock files for tools other than uv (uv.lock is tracked)

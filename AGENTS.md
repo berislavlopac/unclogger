@@ -49,7 +49,7 @@ entry when the public API changes.
 | `just test` | Unit tests (`pytest --spec`). |
 | `just test-cov` | Tests with coverage (floor is **90%**). |
 | `just lint` | `deptry` + `ruff format --check` + `ruff check` + `pydocstyle`. |
-| `just type` | `mypy` over `unclogger/`. |
+| `just type` | `pyrefly check` over `unclogger/`. |
 | `just analyze` | `vulture` (dead code) + `radon` (maintainability). |
 | `just check` | `lint` + `type` + `analyze` — the pre-push gate. |
 | `just reformat` | Auto-fix format + import order (`[confirm]` recipe). |
@@ -64,7 +64,9 @@ PRs it runs the `checks` env and the py310–313 test matrix via
 
 ## Conventions
 
-- **Type checker is `mypy`** (not pyright/ty). `mypy_path = unclogger/`.
+- **Type checker is `pyrefly`** (not mypy/pyright/ty). Configured under
+  `[tool.pyrefly]` in `pyproject.toml` (`project-includes = ["unclogger"]`);
+  mypy-style `# type: ignore` comments are still honoured.
 - **`ruff` is linter + formatter**, line length **96**. The lint `select` set in
   `pyproject.toml` is the contract; don't disable rules without a `# noqa: <code>`
   and a reason. Note `F841` is delegated to `vulture` (the `external` list).

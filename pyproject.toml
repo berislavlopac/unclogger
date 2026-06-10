@@ -41,7 +41,7 @@ tests = [
     "pytest>=7.1.2",
     "pytest-cov>=3.0.0",
     "pytest-spec>=3.2.0",
-    "mypy>=1.8.0",
+    "pyrefly>=1.0.0",
 ]
 checks = [
     "ruff>=0.1",
@@ -123,9 +123,8 @@ external = [
 # to be opt-out in the future.
 docstring-code-format = false
 
-[tool.mypy]
-mypy_path = "unclogger/"
-ignore_missing_imports = true
+[tool.pyrefly]
+project-includes = ["unclogger"]
 
 [tool.pydocstyle]
 add-ignore = "D105, D107, D212, D401"

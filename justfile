@@ -19,7 +19,7 @@ lint:
 
 # Run static typing analysis.
 type:
-    uv run mypy --install-types --non-interactive unclogger/
+    uv run pyrefly check
 
 # Run dead-code and maintainability analysis.
 analyze:
